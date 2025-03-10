@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <div th:replace="fragments/config :: configboot"></div>
+    <title>Listagem</title>
+</head>
+<body>
+
+
+<div class="container">
+
+    <div th:replace="fragments/header :: cabecalho"></div>
+    <div class="row">
+        <div class="col-12">
+            <h1>Listagem de alunos</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <form th:action="@{/aluno/buscar}" method="post" name="buscar">
+                <div class="input-group">
+
+                    <input th:type="text" class="form-control" name="nome">
+                    <button class="btn btn-primary" type="submit" value="buscar">Buscar</button>
+
+
+                </div>
+            </form>
+
+        </div>
+        <div class="col-6">
+            <a th:href="@{/aluno/novo}" class="btn btn-success" style="float: right">Cadastrar</a>
+        </div>
+    </div>
+    <br>
+    <div class="alert alert-success alert-dismissible fade show" th:if="${mensagem}">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <span th:text="${mensagem}"></span>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Matrícula</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>CPF</th>
+            <th>Data de Nascimento</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tr th:if="${alunos.empty}">
+            <td colspan="2">Sem Alunos</td>
+        </tr>
+        <tr th:each="aluno : ${alunos}">
+            <td><span th:text="${aluno.id}"> Id </span></td>
+            <td><span th:text="${aluno.matricula}"> Matrícula </span></td>
+            <td><span th:text="${aluno.nome}"> Nome </span></td>
+            <td><span th:text="${aluno.email}"> Email </span></td>
+            <td><span th:text="${aluno.cpf}"> CPF </span></td>
+            <td><span th:text="${aluno.dataNascimento}"> Data de Nascimento</span></td>
+            <td>
+                <a class="btn btn-outline-danger btn-sm"
+                   th:href="@{/aluno/excluir/{id}(id=${aluno.id})}"
+                   th:data-confirm-delete="|Você gostaria de apagar ${aluno.nome}?|"
+                   onclick="if (!confirm(this.getAttribute('data-confirm-delete'))) return false">
+                    Apagar
+                </a>
+
+                <a class="btn btn-outline-primary btn-sm"
+                   th:href="@{/aluno/alterar/{id}(id=${aluno.id})}">Editar
+                </a>
+
+            </td>
+        </tr>
+    </table>
+</div>
+<div th:replace="fragments/footer :: rodape"></div>
+</body>
+</html>
